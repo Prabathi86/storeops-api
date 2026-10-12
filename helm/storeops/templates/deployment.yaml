@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storeops
+  labels:
+    app: storeops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: storeops
+  template:
+    metadata:
+      labels:
+        app: storeops
+    spec:
+      containers:
+        - name: storeops
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+          ports:
+            - containerPort: 8080
+
+          env:            
+            - name: CONSUMER_REFRESH_URL
+              value: "{{ .Values.consumerRefreshUrl }}"
+          
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 90
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 120
+            periodSeconds: 10

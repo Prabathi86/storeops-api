@@ -1,0 +1,6 @@
+apiVersion: v2
+name: storeops
+description: StoreOps Spring Boot application for OCP Dev
+type: application
+version: 1.0.2
+appVersion: "1.0.1"

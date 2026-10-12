@@ -1,0 +1,42 @@
+replicaCount: 1
+
+image:
+  repository: docker.io/prabathi/storeops
+  tag: "1.0.2"
+  pullPolicy: Always
+
+service:
+  port: 8080
+  type: ClusterIP
+
+route:
+  enabled: true
+  host: ""   # leave empty for OCP to auto-generate
+
+resources:
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+  requests:
+    cpu: "200m"
+    memory: "256Mi"
+
+env:
+  SPRING_PROFILES_ACTIVE: "dev"
+
+config:
+  APP_NAME: "storeops"
+
+secret:
+  DB_USERNAME: "storeops"
+  DB_PASSWORD: "storeops"
+
+livenessProbe:
+  path: /actuator/health
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+readinessProbe:
+  path: /actuator/health
+  initialDelaySeconds: 30
+  periodSeconds: 10
